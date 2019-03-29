@@ -1,6 +1,5 @@
 package me.thanel.recyclerviewutils.viewholder
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,18 +19,7 @@ abstract class BaseItemViewBinder<T>(
         if (onItemClickListener == null) return
 
         holder.itemView.setOnClickListener {
-            @Suppress("UNCHECKED_CAST")
-            val boundItem = it.getTag(R.id.bound_item) as? T
-
-            if (boundItem == null) {
-                Log.w(
-                    TAG,
-                    "Couldn't invoke item click action due to missing bound item." +
-                            " Did you forget to call super.onBindViewHolder?"
-                )
-            } else {
-                onItemClickListener?.invoke(it, boundItem)
-            }
+            onItemClickListener?.invoke(it, getBoundItem(it))
         }
     }
 
@@ -44,7 +32,9 @@ abstract class BaseItemViewBinder<T>(
         holder.itemView.setTag(R.id.bound_item, item)
     }
 
-    companion object {
-        private const val TAG = "RecyclerViewUtils"
-    }
+    @Suppress("UNCHECKED_CAST")
+    protected fun getBoundItem(view: View) = view.getTag(R.id.bound_item) as? T
+        ?: throw IllegalStateException(
+            "Bound item not found. Did you forget to call `super.onBindViewHolder`?"
+        )
 }
