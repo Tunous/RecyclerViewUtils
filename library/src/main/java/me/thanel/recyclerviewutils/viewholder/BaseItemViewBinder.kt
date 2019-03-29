@@ -13,15 +13,7 @@ abstract class BaseItemViewBinder<T>(
     @LayoutRes private val layoutResource: Int
 ) : ItemViewBinder<T, ContainerViewHolder>() {
 
-    private var onItemClickListener: ((View, T) -> Unit)? = null
-
-    fun withItemClickListener(listener: (View, T) -> Unit) = apply {
-        onItemClickListener = listener
-    }
-
-    fun withItemClickListener(listener: (T) -> Unit) = withItemClickListener { _, item ->
-        listener(item)
-    }
+    var onItemClickListener: ((View, T) -> Unit)? = null
 
     @CallSuper
     open fun onInflateViewHolder(holder: ContainerViewHolder) {
