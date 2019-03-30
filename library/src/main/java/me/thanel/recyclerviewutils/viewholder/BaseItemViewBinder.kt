@@ -1,5 +1,6 @@
 package me.thanel.recyclerviewutils.viewholder
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,8 +33,25 @@ abstract class BaseItemViewBinder<T>(
         holder.itemView.setTag(R.id.bound_item, item)
     }
 
+    @CallSuper
+    override fun onBindViewHolder(holder: ContainerViewHolder, item: T, payloads: List<Any>) {
+        holder.itemView.setTag(R.id.bound_item, item)
+    }
+
+    protected fun <E : Enum<E>> handleEnumPayloadChanges(payloads: List<Any>, block: (E) -> Unit) {
+        for (payload in payloads) {
+            @Suppress("UNCHECKED_CAST")
+            val changes = payload as? List<E>
+            if (changes == null) {
+                Log.w("RecyclerViewUtils", "Unsupported payload: $payload")
+                continue
+            }
+            changes.forEach(block)
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
-    protected fun getBoundItem(view: View) = view.getTag(R.id.bound_item) as? T
+    private fun getBoundItem(view: View) = view.getTag(R.id.bound_item) as? T
         ?: throw IllegalStateException(
             "Bound item not found. Did you forget to call `super.onBindViewHolder`?"
         )
