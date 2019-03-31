@@ -1,12 +1,13 @@
 package me.thanel.recyclerviewutils.viewholder
 
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
-fun <T> BaseItemViewBinder<T>.withItemClickListener(listener: (View, T) -> Unit) = apply {
+fun <T, VH : RecyclerView.ViewHolder> BaseItemViewBinder<T, VH>.withItemClickListener(listener: (View, T) -> Unit) = apply {
     onItemClickListener = listener
 }
 
-fun <T> BaseItemViewBinder<T>.withItemClickListener(listener: (T) -> Unit) =
+fun <T, VH : RecyclerView.ViewHolder> BaseItemViewBinder<T, VH>.withItemClickListener(listener: (T) -> Unit) =
     withItemClickListener { _, item ->
         listener(item)
     }

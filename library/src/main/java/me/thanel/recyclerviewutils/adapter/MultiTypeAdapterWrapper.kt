@@ -10,7 +10,6 @@ import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.recyclerviewutils.diff.ItemCallbacks
 import me.thanel.recyclerviewutils.diff.ListDiffUtilCallback
 import me.thanel.recyclerviewutils.diff.register
-import me.thanel.recyclerviewutils.viewholder.BaseItemViewBinder
 
 /**
  * Wrapper class for [MultiTypeAdapter] that provides support for diff calculation of adapter
@@ -22,8 +21,8 @@ class MultiTypeAdapterWrapper {
     val adapter = MultiTypeAdapter()
     val itemCallbacks = ItemCallbacks()
 
-    inline fun <reified T : Any> register(
-        binder: BaseItemViewBinder<T>,
+    inline fun <reified T : Any, VH : RecyclerView.ViewHolder> register(
+        binder: ItemViewBinder<T, VH>,
         diffCallback: DiffUtil.ItemCallback<T>
     ) {
         adapter.register(binder)
